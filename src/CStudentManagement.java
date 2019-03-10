@@ -1,3 +1,14 @@
+import java.util.List;
+import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
@@ -177,4 +188,97 @@ public class CStudentManagement {
 			});
 		}
 	}
+	
+	public boolean ImportFromCSV(String fileName) throws FileNotFoundException, IOException
+	{
+		FileReader fr = new FileReader(fileName);
+		
+		try (BufferedReader br = new BufferedReader(fr)){
+			String line = "";
+			
+			br.readLine();			
+			while ((line = br.readLine()) != null)
+			{
+				String[] values = line.split(",");
+				
+				CStudent newStudent = new CStudent();
+				
+				try {
+					Integer id = Integer.parseInt(values[0]);
+					newStudent.set_ID(id);
+				}
+				catch(NumberFormatException ex)
+				{
+//					System.out.println(">_ Khong the parse!");
+					return false;
+				}
+				
+				float score = Float.parseFloat(values[2]);
+
+				newStudent.set_Name(values[1]);
+				newStudent.set_Score(score);
+				newStudent.set_Image(values[3]);
+				newStudent.set_Addr(values[4]);
+				newStudent.set_Note(values[5]);
+				
+				newStudent.show();
+				
+				this.addNewStudent(newStudent);
+			}
+			
+			return true;
+		}
+		catch(FileNotFoundException ex)
+		{
+			return false;
+		}
+	}
+	
+	public boolean ExportFromCSV(String fileName) throws IOException
+	{
+		try (PrintWriter pw = new PrintWriter(new FileWriter(fileName)))
+		{
+			final String COMMA  = ",";
+			final String NEW_LINE = "\n";
+			final String FILE_HEADER = "mhs,ten,diem,hinhanh,diachi,ghichu";
+			
+			StringBuilder sb = new StringBuilder();
+			
+			sb.append(FILE_HEADER);
+			sb.append(NEW_LINE);
+			
+			for (int i = 0; i < this._listStudent.size(); i++)
+			{
+				sb.append(this._listStudent.elementAt(i).get_ID());
+				sb.append(COMMA);
+				
+				sb.append(this._listStudent.elementAt(i).get_Name());
+				sb.append(COMMA);
+				
+				sb.append(this._listStudent.elementAt(i).get_Score());
+				sb.append(COMMA);
+				
+				sb.append(this._listStudent.elementAt(i).get_Image());
+				sb.append(COMMA);
+				
+				sb.append(this._listStudent.elementAt(i).get_Addr());
+				sb.append(COMMA);
+				
+				sb.append(this._listStudent.elementAt(i).get_Note());
+				sb.append(COMMA);
+				
+				sb.append(NEW_LINE);
+				
+			}
+			
+			pw.write(sb.toString());
+			
+			return true;
+		}
+		catch(FileNotFoundException ex)
+		{
+			return false;
+		}
+	}
+	
 }

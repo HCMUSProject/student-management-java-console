@@ -1,14 +1,11 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.Scanner;
 
 public class QuanLiHocSinh_Main {
 
 	
 	public static void main(String[] args) throws IOException {
-		
 		CStudentManagement CSManagement = new CStudentManagement();
 
 		int nChoose = -1;
@@ -135,8 +132,26 @@ public class QuanLiHocSinh_Main {
 				CSManagement.ShowListStudents();
 				break;
 			case 8:	// import csv
+				System.out.print("Nhap ten file csv de import: ");
+				String fileName8 = br.readLine();
+				
+				boolean bRes8 = CSManagement.ImportFromCSV(fileName8);
+				
+				if (bRes8 == true)
+				{
+					System.out.println(">_ Import thanh cong!");
+				}
+				else
+				{
+					System.out.println(">_ Import that bai!");
+				}
+				
 				break;
 			case 9:	// export csv
+				System.out.print("Nhap ten file csv de export: ");
+				String fileName9 = br.readLine();
+				
+				boolean bRes9 = CSManagement.ExportFromCSV(fileName9);
 				break;
 			}
 			
